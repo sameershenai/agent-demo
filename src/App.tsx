@@ -75,75 +75,21 @@ function App() {
   const [selectedJobId, setSelectedJobId] = useState<string | null>(null);
   const [currentGoal, setCurrentGoal] = useState<string>('');
 
-  const handleJobSearch = (input: string) => {
+  const handleJobSearch = (jsonData: string, goalText: string) => {
     try {
-      // Try to parse as JSON
-      const jsonData = JSON.parse(input);
-      setResponse(jsonData);
-
-      // Create a dummy goal from the first job's title and company
-      if (jsonData.jobs && jsonData.jobs.length > 0) {
-        const firstJob = jsonData.jobs[0];
-        const dummyGoal = `Looking for ${firstJob.jobPostingData.title} roles${
-          firstJob.jobPostingData.companyName
-            ? `, especially at companies like ${firstJob.jobPostingData.companyName}`
-            : ''
-        }`;
-        setCurrentGoal(dummyGoal);
-      }
-    } catch {
-      // If not JSON, use as goal text
-      setCurrentGoal(input);
-      const sampleResponse = {
-        "response": "Thank you for using Job Seeker Agent, I've picked 3 jobs for you.",
-        "goalId": "d2c88604-6794-40f7-aae0-264a3c15dc0f",
-        "jobs": [
-          {
-            "jobId": "4128046946",
-            "resumeData": "Mock resume data for job 4128046946, title:Engineering Manager, UI Components and Patterns",
-            "coverLetterData": "Mock cover letter data for job 4128046946, title: FEngineering Manager, UI Components and Patterns",
-            "feedback": {
-              "matchLevel": "high",
-              "additionalComment": "Great match for your skills",
-              "suggestions": [
-                "Improve your LinkedIn profile",
-                "Reach out to connections at this company"
-              ],
-              "actions": [
-                {
-                  "actionType": "EDIT_RESUME",
-                  "description": "Update your resume with recent projects",
-                  "targetResource": "resume_link_4128046946"
-                },
-                {
-                  "actionType": "ADD_SKILLS",
-                  "description": "Add new skills to your profile",
-                  "targetResource": "skills_link_4128046946"
-                }
-              ]
-            },
-            "jobPostingData": {
-              "id": "4128046946",
-              "title": "Frontend Engineer, UI Components and Patterns",
-              "experienceLevel": "MID_SENIOR_LEVEL",
-              "jobDescription": "Who we are\n**About Stripe**\nStripe is a financial infrastructure platform for businesses...",
-              "company": "Stripe, Stripe is a financial infrastructure platform for businesses...",
-              "compensationDescription": "$136.8K/year - $205.2K/year",
-              "workplaceTypes": "[Remote]",
-              "geoLocation": "United States",
-              "companyName": "Stripe"
-            }
-          }
-          // ... you can add the other jobs from input.json here
-        ]
-      };
-      setResponse(sampleResponse);
+      // Parse and use the JSON data
+      const jsonResponse = JSON.parse(jsonData);
+      setResponse(jsonResponse);
+      // Use the goal text for display
+      setCurrentGoal(goalText);
+    } catch (error) {
+      console.error('Error parsing JSON:', error);
     }
   };
 
   const handleGoalUpdate = (newGoal: string) => {
     setCurrentGoal(newGoal);
-    handleJobSearch(newGoal);
+    handleJobSearch(newGoal, newGoal);
   };
 
   return (

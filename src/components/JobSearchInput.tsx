@@ -8,15 +8,17 @@ import {
   Chip,
   Divider,
   styled,
-  Link,
+  IconButton,
+  Collapse,
 } from '@mui/material';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import WorkIcon from '@mui/icons-material/Work';
-import CodeIcon from '@mui/icons-material/Code';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import { useState } from 'react';
 
 interface Props {
-  onSubmit: (input: string) => void;
+  onSubmit: (jsonData: string, goalText: string) => void;
 }
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
@@ -38,12 +40,13 @@ const exampleGoals = [
 
 function JobSearchInput({ onSubmit }: Props) {
   const [goal, setGoal] = useState('');
-  const [isJsonMode, setIsJsonMode] = useState(false);
+  const [jsonInput, setJsonInput] = useState('');
+  const [showJson, setShowJson] = useState(true);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (goal.trim()) {
-      onSubmit(goal);
+    if (goal.trim() && jsonInput.trim()) {
+      onSubmit(jsonInput, goal);
     }
   };
 
@@ -70,118 +73,114 @@ function JobSearchInput({ onSubmit }: Props) {
             <Stack spacing={2} alignItems="center">
               <WorkIcon sx={{ fontSize: 40, color: 'primary.main' }} />
               <Typography variant="h4" fontWeight={600} align="center" gutterBottom>
-                {isJsonMode ? 'Enter JSON Data' : "What's your dream job?"}
+                What's your dream job?
               </Typography>
-              {!isJsonMode && (
-                <Typography variant="body1" color="text.secondary" align="center">
-                  Describe your ideal role and let our AI agent find the perfect matches for you
-                </Typography>
-              )}
+              <Typography variant="body1" color="text.secondary" align="center">
+                Describe your ideal role and let our AI agent find the perfect matches for you
+              </Typography>
             </Stack>
           </Box>
 
           <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>
-            <TextField
-              fullWidth
-              multiline
-              rows={isJsonMode ? 10 : 3}
-              value={goal}
-              onChange={(e) => setGoal(e.target.value)}
-              placeholder={isJsonMode
-                ? "Paste your JSON data here..."
-                : "Example: Looking for a Senior Frontend Engineer role at a tech company, preferably in San Francisco or remote. Interested in companies with strong engineering culture and work-life balance."
-              }
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  backgroundColor: 'grey.50',
-                  fontSize: '1.1rem',
-                  fontFamily: isJsonMode ? 'monospace' : 'inherit',
-                },
-              }}
-            />
+            <Stack spacing={2} alignItems="center">
+              <TextField
+                fullWidth
+                multiline
+                rows={3}
+                value={goal}
+                onChange={(e) => setGoal(e.target.value)}
+                placeholder="Example: Looking for a Senior Frontend Engineer role at a tech company, preferably in San Francisco or remote. Interested in companies with strong engineering culture and work-life balance."
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    backgroundColor: 'grey.50',
+                    fontSize: '1.1rem',
+                  },
+                  width: '100%',
+                }}
+              />
 
-            <Button
-              type="submit"
-              variant="contained"
-              size="large"
-              fullWidth
-              disabled={!goal.trim()}
-              startIcon={isJsonMode ? <CodeIcon /> : <RocketLaunchIcon />}
-              sx={{
-                mt: 3,
-                height: 48,
-                fontSize: '1.1rem',
-                maxWidth: 320,
-              }}
-            >
-              {isJsonMode ? 'Load JSON Data' : 'Find Matching Jobs'}
-            </Button>
+              <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, justifyContent: 'center', width: '100%' }}>
+                <Typography variant="body2" color="text.secondary">
+                  More
+                </Typography>
+                <IconButton onClick={() => setShowJson(!showJson)} size="small">
+                  {showJson ? <ExpandLessIcon /> : <ExpandMoreIcon />}
+                </IconButton>
+              </Box>
+
+              <Collapse in={showJson} sx={{ width: '100%' }}>
+                <TextField
+                  fullWidth
+                  multiline
+                  rows={10}
+                  value={jsonInput}
+                  onChange={(e) => setJsonInput(e.target.value)}
+                  placeholder="Paste your JSON data here..."
+                  sx={{
+                    '& .MuiOutlinedInput-root': {
+                      backgroundColor: 'grey.50',
+                      fontSize: '1.1rem',
+                      fontFamily: 'monospace',
+                    },
+                  }}
+                />
+              </Collapse>
+
+              <Button
+                type="submit"
+                variant="contained"
+                size="large"
+                disabled={!goal.trim() || !jsonInput.trim()}
+                startIcon={<RocketLaunchIcon />}
+                sx={{
+                  mt: 3,
+                  height: 48,
+                  fontSize: '1.1rem',
+                  width: 320,
+                }}
+              >
+                Find Matching Jobs
+              </Button>
+            </Stack>
           </Box>
 
-          {!isJsonMode && (
-            <>
-              <Box sx={{ width: '100%' }}>
-                <Divider sx={{ my: 3 }}>
-                  <Typography variant="body2" color="text.secondary">
-                    Or try these examples
-                  </Typography>
-                </Divider>
+          <Box sx={{ width: '100%' }}>
+            <Divider sx={{ my: 3 }}>
+              <Typography variant="body2" color="text.secondary">
+                Or try these examples
+              </Typography>
+            </Divider>
 
-                <Stack
-                  direction="row"
-                  flexWrap="wrap"
-                  spacing={1}
-                  justifyContent="center"
-                  sx={{ gap: 1 }}
-                >
-                  {exampleGoals.map((example) => (
-                    <Chip
-                      key={example}
-                      label={example}
-                      onClick={() => handleExampleClick(example)}
-                      variant="outlined"
-                      sx={{
-                        borderRadius: 2,
-                        '&:hover': {
-                          bgcolor: 'primary.light',
-                          color: 'white',
-                        },
-                      }}
-                    />
-                  ))}
-                </Stack>
-              </Box>
-
-              <Box sx={{ maxWidth: 520 }}>
-                <Typography variant="body2" color="text.secondary" align="center">
-                  Our AI agent will analyze your goal and find jobs that match your preferences,
-                  including company culture, location, and technical requirements.
-                </Typography>
-              </Box>
-            </>
-          )}
-
-          <Divider sx={{ width: '100%' }} />
-
-          <Box>
-            <Link
-              component="button"
-              variant="body2"
-              onClick={() => setIsJsonMode(!isJsonMode)}
-              sx={{
-                display: 'flex',
-                alignItems: 'center',
-                gap: 0.5,
-                color: 'text.secondary',
-                textDecoration: 'none',
-                '&:hover': {
-                  color: 'primary.main',
-                },
-              }}
+            <Stack
+              direction="row"
+              flexWrap="wrap"
+              spacing={1}
+              justifyContent="center"
+              sx={{ gap: 1 }}
             >
-              <CodeIcon fontSize="small" />
-              {isJsonMode ? 'Switch to Goal Input' : 'Switch to JSON Input'}
-            </Link>
+              {exampleGoals.map((example) => (
+                <Chip
+                  key={example}
+                  label={example}
+                  onClick={() => handleExampleClick(example)}
+                  variant="outlined"
+                  sx={{
+                    borderRadius: 2,
+                    '&:hover': {
+                      bgcolor: 'primary.light',
+                      color: 'white',
+                    },
+                  }}
+                />
+              ))}
+            </Stack>
+          </Box>
+
+          <Box sx={{ maxWidth: 520 }}>
+            <Typography variant="body2" color="text.secondary" align="center">
+              Our AI agent will analyze your goal and find jobs that match your preferences,
+              including company culture, location, and technical requirements.
+            </Typography>
           </Box>
         </Stack>
       </StyledPaper>
