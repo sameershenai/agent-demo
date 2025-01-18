@@ -10,6 +10,8 @@ import {
   styled,
   IconButton,
   Collapse,
+  CircularProgress,
+  Backdrop,
 } from '@mui/material';
 import RocketLaunchIcon from '@mui/icons-material/RocketLaunch';
 import WorkIcon from '@mui/icons-material/Work';
@@ -42,11 +44,16 @@ function JobSearchInput({ onSubmit }: Props) {
   const [goal, setGoal] = useState('');
   const [jsonInput, setJsonInput] = useState('');
   const [showJson, setShowJson] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (goal.trim() && jsonInput.trim()) {
+      setIsLoading(true);
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
       onSubmit(jsonInput, goal);
+      setIsLoading(false);
     }
   };
 
@@ -130,8 +137,8 @@ function JobSearchInput({ onSubmit }: Props) {
                 type="submit"
                 variant="contained"
                 size="large"
-                disabled={!goal.trim() || !jsonInput.trim()}
-                startIcon={<RocketLaunchIcon />}
+                disabled={!goal.trim() || !jsonInput.trim() || isLoading}
+                startIcon={isLoading ? <CircularProgress size={20} color="inherit" /> : <RocketLaunchIcon />}
                 sx={{
                   mt: 3,
                   height: 48,
@@ -139,7 +146,7 @@ function JobSearchInput({ onSubmit }: Props) {
                   width: 320,
                 }}
               >
-                Find Matching Jobs
+                {isLoading ? 'Finding matches...' : 'Find Matching Jobs'}
               </Button>
             </Stack>
           </Box>
@@ -184,6 +191,22 @@ function JobSearchInput({ onSubmit }: Props) {
           </Box>
         </Stack>
       </StyledPaper>
+
+      <Backdrop
+        sx={{
+          color: '#fff',
+          zIndex: (theme) => theme.zIndex.drawer + 1,
+          backgroundColor: 'rgba(0, 0, 0, 0.8)',
+        }}
+        open={isLoading}
+      >
+        <Stack spacing={2} alignItems="center">
+          <CircularProgress color="inherit" size={48} />
+          <Typography variant="h6" color="inherit">
+            Finding your perfect matches...
+          </Typography>
+        </Stack>
+      </Backdrop>
     </Box>
   );
 }
