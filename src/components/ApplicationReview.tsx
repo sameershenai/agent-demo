@@ -191,7 +191,7 @@ function ApplicationReview({ open, onClose, job }: Props) {
           <Stack direction="row" alignItems="center" justifyContent="space-between">
             <Box>
               <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                Easy Apply
+                Review Application
               </Typography>
               <Typography variant="body2" color="text.secondary">
                 {job.jobPostingData.title} at {job.jobPostingData.companyName}

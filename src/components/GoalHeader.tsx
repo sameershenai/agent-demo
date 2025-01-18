@@ -1,9 +1,10 @@
-import { Box, Paper, Typography, IconButton, Stack, Collapse, TextField, Button, Chip, Divider, Grid, LinearProgress } from '@mui/material';
+import { Box, Paper, Typography, IconButton, Stack, Collapse, TextField, Button, Chip, Divider, Grid, LinearProgress, Slide } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import TargetIcon from '@mui/icons-material/TrackChanges';
 import TrendingUpIcon from '@mui/icons-material/TrendingUp';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
-import BuildIcon from '@mui/icons-material/Build';
+import KeyboardArrowLeftIcon from '@mui/icons-material/KeyboardArrowLeft';
+import KeyboardArrowRightIcon from '@mui/icons-material/KeyboardArrowRight';
 import { useState } from 'react';
 import { styled } from '@mui/material/styles';
 
@@ -70,6 +71,7 @@ const InsightCard = styled(Box)(({ theme }) => ({
 function GoalHeader({ goal, onGoalUpdate, showEditButton = true }: Props) {
   const [isEditingGoal, setIsEditingGoal] = useState(false);
   const [goalText, setGoalText] = useState(goal);
+  const [activeInsightIndex, setActiveInsightIndex] = useState(0);
 
   const handleGoalUpdate = () => {
     if (onGoalUpdate) {
@@ -79,18 +81,111 @@ function GoalHeader({ goal, onGoalUpdate, showEditButton = true }: Props) {
   };
 
   const insights = {
-    searches: 12,
+    searches: 13,
     totalJobs: 48,
     matchStats: {
       high: 35,
       medium: 45,
       low: 20,
     },
+    responseStats: {
+      applied: 24,
+      heardBack: 16,
+      rate: 67, // percentage
+    },
+    interviewStages: [
+      {
+        stage: "Initial Screen",
+        count: 8,
+        status: "completed"
+      },
+      {
+        stage: "Technical Round",
+        count: 5,
+        status: "completed"
+      },
+      {
+        stage: "System Design",
+        count: 3,
+        status: "in_progress"
+      },
+      {
+        stage: "Final Round",
+        count: 2,
+        status: "upcoming"
+      }
+    ],
     skillGaps: [
       'Cloud Architecture',
       'System Design',
       'React Native',
     ],
+  };
+
+  const insightCards = [
+    {
+      title: "Search Activity",
+      icon: <WorkHistoryIcon color="primary" />,
+      content: (
+        <Stack spacing={0.5}>
+          <Typography variant="h4" color="primary.main">
+            {insights.searches}
+          </Typography>
+          <Typography variant="body2" color="text.secondary">
+            {insights.totalJobs} jobs analyzed this month
+          </Typography>
+        </Stack>
+      )
+    },
+    {
+      title: "Response Rate",
+      icon: <TrendingUpIcon color="primary" />,
+      content: (
+        <Stack spacing={1}>
+          <Typography variant="h4" color="primary.main">
+            {insights.responseStats.rate}%
+          </Typography>
+          <LinearProgress
+            variant="determinate"
+            value={insights.responseStats.rate}
+            sx={{
+              height: 6,
+              borderRadius: 3,
+              bgcolor: 'grey.100',
+              '& .MuiLinearProgress-bar': {
+                bgcolor: '#057642',
+              },
+            }}
+          />
+        </Stack>
+      )
+    },
+    {
+      title: "Interview Pipeline",
+      icon: <WorkHistoryIcon color="primary" />,
+      content: (
+        <Stack spacing={1}>
+          {insights.interviewStages.slice(0, 2).map((stage) => (
+            <Box key={stage.stage}>
+              <Stack direction="row" justifyContent="space-between">
+                <Typography variant="body2">{stage.stage}</Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {stage.count}
+                </Typography>
+              </Stack>
+            </Box>
+          ))}
+        </Stack>
+      )
+    },
+  ];
+
+  const handleNextInsight = () => {
+    setActiveInsightIndex((prev) => (prev + 1) % insightCards.length);
+  };
+
+  const handlePrevInsight = () => {
+    setActiveInsightIndex((prev) => (prev - 1 + insightCards.length) % insightCards.length);
   };
 
   return (
@@ -177,87 +272,85 @@ function GoalHeader({ goal, onGoalUpdate, showEditButton = true }: Props) {
       {goal && (
         <>
           <Divider sx={{ my: 3 }} />
-          <Typography variant="subtitle2" color="text.secondary" sx={{ mb: 2 }}>
-            Job Search Insights
-          </Typography>
-          <Grid container spacing={2}>
-            <Grid item xs={12} md={4}>
-              <InsightCard>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <WorkHistoryIcon color="primary" />
-                  <Typography variant="subtitle2">Search Activity</Typography>
-                </Stack>
-                <Stack spacing={0.5}>
-                  <Typography variant="h4" color="primary.main">
-                    {insights.searches}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Searches this month
-                  </Typography>
-                  <Typography variant="body2">
-                    {insights.totalJobs} jobs analyzed
-                  </Typography>
-                </Stack>
-              </InsightCard>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <InsightCard>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <TrendingUpIcon color="primary" />
-                  <Typography variant="subtitle2">Match Distribution</Typography>
-                </Stack>
-                <Stack spacing={1} sx={{ flex: 1 }}>
-                  <Box>
-                    <Stack direction="row" justifyContent="space-between">
-                      <Typography variant="body2">High Match</Typography>
-                      <Typography variant="body2" color="success.main">
-                        {insights.matchStats.high}%
-                      </Typography>
-                    </Stack>
-                    <LinearProgress
-                      variant="determinate"
-                      value={insights.matchStats.high}
-                      color="success"
-                      sx={{ height: 6, borderRadius: 3 }}
-                    />
-                  </Box>
-                  <Box>
-                    <Stack direction="row" justifyContent="space-between">
-                      <Typography variant="body2">Medium Match</Typography>
-                      <Typography variant="body2" color="warning.main">
-                        {insights.matchStats.medium}%
-                      </Typography>
-                    </Stack>
-                    <LinearProgress
-                      variant="determinate"
-                      value={insights.matchStats.medium}
-                      color="warning"
-                      sx={{ height: 6, borderRadius: 3 }}
-                    />
-                  </Box>
-                </Stack>
-              </InsightCard>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <InsightCard>
-                <Stack direction="row" alignItems="center" spacing={1}>
-                  <BuildIcon color="primary" />
-                  <Typography variant="subtitle2">Top Skill Gaps</Typography>
-                </Stack>
-                <Stack spacing={1}>
-                  {insights.skillGaps.map((skill) => (
-                    <Chip
-                      key={skill}
-                      label={skill}
-                      size="small"
-                      variant="outlined"
-                      sx={{ alignSelf: 'flex-start' }}
-                    />
-                  ))}
-                </Stack>
-              </InsightCard>
-            </Grid>
-          </Grid>
+          <Box sx={{ position: 'relative' }}>
+            <Stack
+              direction="row"
+              alignItems="center"
+              justifyContent="space-between"
+              sx={{ mb: 2 }}
+            >
+              <Typography variant="subtitle2" color="text.secondary">
+                Job Seeking Goal Insights
+              </Typography>
+              <Stack direction="row" spacing={1}>
+                <IconButton
+                  size="small"
+                  onClick={handlePrevInsight}
+                  sx={{
+                    bgcolor: 'grey.100',
+                    '&:hover': { bgcolor: 'grey.200' }
+                  }}
+                >
+                  <KeyboardArrowLeftIcon />
+                </IconButton>
+                <IconButton
+                  size="small"
+                  onClick={handleNextInsight}
+                  sx={{
+                    bgcolor: 'grey.100',
+                    '&:hover': { bgcolor: 'grey.200' }
+                  }}
+                >
+                  <KeyboardArrowRightIcon />
+                </IconButton>
+              </Stack>
+            </Stack>
+
+            <Box sx={{ position: 'relative', height: 140 }}>
+              <Slide
+                direction="left"
+                in={true}
+                mountOnEnter
+                unmountOnExit
+              >
+                <Box sx={{ position: 'absolute', width: '100%' }}>
+                  <Grid container spacing={2}>
+                    {[0, 1, 2].map((offset) => {
+                      const index = (activeInsightIndex + offset) % insightCards.length;
+                      const card = insightCards[index];
+                      return (
+                        <Grid item xs={12} md={4} key={index}>
+                          <InsightCard>
+                            <Stack direction="row" alignItems="center" spacing={1} sx={{ mb: 1 }}>
+                              {card.icon}
+                              <Typography variant="subtitle2">{card.title}</Typography>
+                            </Stack>
+                            {card.content}
+                          </InsightCard>
+                        </Grid>
+                      );
+                    })}
+                  </Grid>
+                </Box>
+              </Slide>
+            </Box>
+
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              {insightCards.map((_, index) => (
+                <Box
+                  key={index}
+                  sx={{
+                    width: 8,
+                    height: 8,
+                    borderRadius: '50%',
+                    bgcolor: index === activeInsightIndex ? 'primary.main' : 'grey.300',
+                    mx: 0.5,
+                    transition: 'background-color 0.3s',
+                  }}
+                />
+              ))}
+            </Box>
+          </Box>
         </>
       )}
     </StyledPaper>
