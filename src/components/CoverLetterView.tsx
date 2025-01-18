@@ -1,4 +1,5 @@
-import { Paper, Typography, Box } from '@mui/material';
+import { Box, Paper } from '@mui/material';
+import HtmlContent from './shared/HtmlContent';
 
 interface Props {
   coverLetterData: string;
@@ -6,20 +7,20 @@ interface Props {
 
 function CoverLetterView({ coverLetterData }: Props) {
   return (
-    <Paper sx={{ p: 3 }}>
-      <Typography variant="h5" gutterBottom>
-        Generated Cover Letter
-      </Typography>
-      <Box sx={{
-        whiteSpace: 'pre-wrap',
-        fontFamily: 'monospace',
-        bgcolor: 'grey.50',
-        p: 2,
-        borderRadius: 1
-      }}>
-        {coverLetterData}
-      </Box>
-    </Paper>
+    <Box>
+      <Paper sx={{ p: 3 }}>
+        <Box sx={{
+          maxWidth: '800px',
+          margin: '0 auto',
+          '& > div': {
+            maxWidth: '600px',
+            margin: '0 auto',
+          }
+        }}>
+          <HtmlContent content={coverLetterData} />
+        </Box>
+      </Paper>
+    </Box>
   );
 }
 

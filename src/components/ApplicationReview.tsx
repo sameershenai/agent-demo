@@ -20,6 +20,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
+import HtmlContent from './shared/HtmlContent';
 
 interface Props {
   open: boolean;
@@ -127,14 +128,34 @@ function ApplicationReview({ open, onClose, job }: Props) {
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
               Cover Letter
             </Typography>
-            <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50' }}>
+            <Paper
+              elevation={0}
+              sx={{
+                p: 3,
+                bgcolor: 'grey.50',
+              }}
+            >
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                 <Typography variant="subtitle1" color="primary">
                   cover-letter.pdf
                 </Typography>
                 <CheckCircleIcon color="success" />
               </Stack>
-              <MarkdownContent content={job.coverLetterData} />
+              <Box sx={{
+                bgcolor: 'background.paper',
+                p: { xs: 2, sm: 3, md: 4 },
+                borderRadius: 1,
+                border: '1px solid',
+                borderColor: 'divider',
+                maxWidth: '800px',
+                margin: '0 auto',
+                '& > div': {
+                  maxWidth: '600px',
+                  margin: '0 auto',
+                }
+              }}>
+                <HtmlContent content={job.coverLetterData} />
+              </Box>
             </Paper>
           </Stack>
         );
