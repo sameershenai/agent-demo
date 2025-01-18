@@ -63,7 +63,7 @@ const contactInfo = {
 
 function ApplicationReview({ open, onClose, job }: Props) {
   const [activeStep, setActiveStep] = useState(0);
-  const totalSteps = 3;
+  const totalSteps = 4;
   const progress = ((activeStep + 1) / totalSteps) * 100;
 
   const handleNext = () => {
@@ -125,6 +125,23 @@ function ApplicationReview({ open, onClose, job }: Props) {
         return (
           <Stack spacing={3}>
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
+              Cover Letter
+            </Typography>
+            <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50' }}>
+              <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
+                <Typography variant="subtitle1" color="primary">
+                  cover-letter.pdf
+                </Typography>
+                <CheckCircleIcon color="success" />
+              </Stack>
+              <MarkdownContent content={job.coverLetterData} />
+            </Paper>
+          </Stack>
+        );
+      case 2:
+        return (
+          <Stack spacing={3}>
+            <Typography variant="h6" sx={{ fontWeight: 600 }}>
               Resume
             </Typography>
             <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50' }}>
@@ -138,7 +155,7 @@ function ApplicationReview({ open, onClose, job }: Props) {
             </Paper>
           </Stack>
         );
-      case 2:
+      case 3:
         return (
           <Stack spacing={3}>
             <Typography variant="h6" sx={{ fontWeight: 600 }}>
@@ -213,6 +230,22 @@ function ApplicationReview({ open, onClose, job }: Props) {
               },
             }}
           />
+          <Stack direction="row" spacing={2} justifyContent="center">
+            {['Contact Info', 'Cover Letter', 'Resume', 'Questions'].map((label, index) => (
+              <Box
+                key={label}
+                sx={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  color: index === activeStep ? 'primary.main' : 'text.secondary',
+                  fontWeight: index === activeStep ? 600 : 400,
+                  fontSize: '0.875rem',
+                }}
+              >
+                {label}
+              </Box>
+            ))}
+          </Stack>
         </Stack>
       </DialogTitle>
 
