@@ -9,11 +9,6 @@ import {
   Chip,
   Stack,
   Tooltip,
-  useTheme,
-  IconButton,
-  Collapse,
-  TextField,
-  Button,
   Slide
 } from '@mui/material';
 import { Job } from '../types/types';
@@ -21,9 +16,6 @@ import { styled } from '@mui/material/styles';
 import { alpha } from '@mui/material/styles';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import TipsAndUpdatesIcon from '@mui/icons-material/TipsAndUpdates';
-import EditIcon from '@mui/icons-material/Edit';
-import { useState } from 'react';
-import JobHistory from './JobHistory';
 
 interface Props {
   jobs: Job[];
@@ -67,7 +59,6 @@ const getMatchColor = (matchLevel: string) => {
 };
 
 function Sidebar({ jobs, selectedJobId, onJobSelect }: Props) {
-  const theme = useTheme();
 
   return (
     <Slide direction="right" in={true} mountOnEnter unmountOnExit>
@@ -170,8 +161,6 @@ function Sidebar({ jobs, selectedJobId, onJobSelect }: Props) {
             </ListItem>
           ))}
         </List>
-
-        <JobHistory />
       </Box>
     </Slide>
   );

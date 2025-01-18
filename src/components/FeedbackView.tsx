@@ -9,7 +9,6 @@ import {
   Chip,
   Stack
 } from '@mui/material';
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
 import LightbulbIcon from '@mui/icons-material/Lightbulb';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import { JobFeedback } from '../types/types';

@@ -1,6 +1,6 @@
-import { Box, Paper, Tab, Tabs, Typography, Fade } from '@mui/material';
+import { Box, Tab, Tabs, Typography, Fade, Paper } from '@mui/material';
 import { useState } from 'react';
-import { Job, JobResponse } from '../types/types';
+import { JobResponse } from '../types/types';
 import JobDetails from './JobDetails';
 import ResumeView from './ResumeView';
 import CoverLetterView from './CoverLetterView';

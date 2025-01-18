@@ -8,7 +8,6 @@ import {
   Typography,
   Paper,
   Stack,
-  Divider,
   TextField,
   Avatar,
   LinearProgress,

@@ -165,8 +165,6 @@ function App() {
               jobs={response.jobs}
               selectedJobId={selectedJobId}
               onJobSelect={setSelectedJobId}
-              currentGoal={currentGoal}
-              onGoalUpdate={handleGoalUpdate}
             />
           )}
           <Box
