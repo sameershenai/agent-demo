@@ -229,6 +229,8 @@ function ApplicationReview({ open, onClose, job }: Props) {
               sx={{
                 p: 3,
                 bgcolor: 'grey.50',
+                maxHeight: '400px',
+                overflowY: 'auto',
               }}
             >
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
@@ -245,6 +247,8 @@ function ApplicationReview({ open, onClose, job }: Props) {
                 borderColor: 'divider',
                 maxWidth: '800px',
                 margin: '0 auto',
+                maxHeight: '400px',
+                overflowY: 'auto',
                 '& > div': {
                   maxWidth: '600px',
                   margin: '0 auto',
@@ -283,7 +287,12 @@ function ApplicationReview({ open, onClose, job }: Props) {
                 Rewrite
               </Button>
             </Stack>
-            <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50' }}>
+            <Paper elevation={0} sx={{
+              p: 3,
+              bgcolor: 'grey.50',
+              maxHeight: '400px',
+              overflowY: 'auto',
+            }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                 <Typography variant="subtitle1" color="primary">
                   justin-lai-resume.pdf

@@ -50,8 +50,7 @@ function JobSearchInput({ onSubmit }: Props) {
     e.preventDefault();
     if (goal.trim() && jsonInput.trim()) {
       setIsLoading(true);
-      // Simulate API call delay
-      await new Promise(resolve => setTimeout(resolve, 2000));
+      await new Promise(resolve => setTimeout(resolve, 3000));
       onSubmit(jsonInput, goal);
       setIsLoading(false);
     }
