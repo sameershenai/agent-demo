@@ -154,44 +154,56 @@ function App() {
         <Box
           sx={{
             display: 'flex',
+            justifyContent: 'center',
             minHeight: 'calc(100vh - 52px)',
             bgcolor: 'background.default',
             background: 'linear-gradient(180deg, #f3f2ef 0%, #ffffff 100%)',
-            mt: '52px', // Height of navbar
+            mt: '52px',
           }}
         >
-          {response && (
-            <Sidebar
-              jobs={response.jobs}
-              selectedJobId={selectedJobId}
-              onJobSelect={setSelectedJobId}
-            />
-          )}
           <Box
-            component="main"
             sx={{
-              flexGrow: 1,
-              p: 4,
-              maxWidth: response ? '1200px' : '800px',
-              margin: '0 auto',
+              display: 'flex',
               width: '100%',
+              maxWidth: '1440px', // Maximum width of the centered container
+              margin: '0 auto',
             }}
           >
-            <GoalHeader
-              goal={currentGoal}
-              onGoalUpdate={handleGoalUpdate}
-              showEditButton={!!response} // Only show edit button after search
-            />
-
-            {!response && (
-              <JobSearchInput onSubmit={handleJobSearch} />
-            )}
             {response && (
-              <MainContent
-                response={response}
+              <Sidebar
+                jobs={response.jobs}
                 selectedJobId={selectedJobId}
+                onJobSelect={setSelectedJobId}
               />
             )}
+            <Box
+              component="main"
+              sx={{
+                flexGrow: 1,
+                p: 4,
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+              }}
+            >
+              <Box sx={{ width: '100%', maxWidth: response ? '1200px' : '800px', margin: '0 auto' }}>
+                <GoalHeader
+                  goal={currentGoal}
+                  onGoalUpdate={handleGoalUpdate}
+                  showEditButton={!!response}
+                />
+
+                {!response && (
+                  <JobSearchInput onSubmit={handleJobSearch} />
+                )}
+                {response && (
+                  <MainContent
+                    response={response}
+                    selectedJobId={selectedJobId}
+                  />
+                )}
+              </Box>
+            </Box>
           </Box>
         </Box>
       </Box>

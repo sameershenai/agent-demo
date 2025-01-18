@@ -11,9 +11,10 @@ import {
   TextField,
   Avatar,
   LinearProgress,
+  alpha,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import MarkdownContent from './shared/MarkdownContent';
 import { Job } from '../types/types';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
@@ -21,6 +22,9 @@ import PhoneIcon from '@mui/icons-material/Phone';
 import EmailIcon from '@mui/icons-material/Email';
 import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import HtmlContent from './shared/HtmlContent';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import ReactCanvasConfetti from 'react-canvas-confetti';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 
 interface Props {
   open: boolean;
@@ -64,8 +68,13 @@ const contactInfo = {
 
 function ApplicationReview({ open, onClose, job }: Props) {
   const [activeStep, setActiveStep] = useState(0);
-  const totalSteps = 4;
+  const totalSteps = 5;
   const progress = ((activeStep + 1) / totalSteps) * 100;
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  useEffect(() => {
+    setActiveStep(0);
+  }, [job.jobId]);
 
   const handleNext = () => {
     setActiveStep((prev) => prev + 1);
@@ -75,9 +84,68 @@ function ApplicationReview({ open, onClose, job }: Props) {
     setActiveStep((prev) => prev - 1);
   };
 
-  const handleSubmit = () => {
-    onClose();
+  const handleSubmit = async () => {
+    setIsSubmitting(true);
+    // Simulate submission delay
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setIsSubmitting(false);
+    handleNext(); // Move to success screen
+    // Add delay to let the success screen render before firing confetti
+    setTimeout(() => {
+      fire();
+    }, 100);
   };
+
+  const confettiConfig = {
+    angle: 90,
+    spread: 100,
+    startVelocity: 40,
+    elementCount: 150,
+    dragFriction: 0.12,
+    duration: 3000,
+    stagger: 3,
+    width: "10px",
+    height: "10px",
+    perspective: "500px",
+    colors: ["#057642", "#0a66c2", "#4CAF50", "#2196F3", "#FFC107"],
+    origin: { x: 0.5, y: 0.25 },
+    particleCount: 150,
+    scalar: 1.2
+  };
+
+  const fire = () => {
+    if (confettiRef.current) {
+      // Initial burst
+      confettiRef.current.confetti({
+        ...confettiConfig,
+        spread: 360,
+        startVelocity: 45,
+        gravity: 1,
+        ticks: 400
+      });
+
+      // Multiple follow-up bursts
+      setTimeout(() => {
+        if (confettiRef.current) {
+          confettiRef.current.confetti({
+            ...confettiConfig,
+            spread: 160,
+            startVelocity: 35,
+            origin: { x: 0.2, y: 0.35 }
+          });
+          confettiRef.current.confetti({
+            ...confettiConfig,
+            spread: 160,
+            startVelocity: 35,
+            origin: { x: 0.8, y: 0.35 }
+          });
+        }
+      }, 250);
+    }
+  };
+
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const confettiRef = useRef<any>(null);
 
   const renderStepContent = (step: number) => {
     switch (step) {
@@ -90,9 +158,15 @@ function ApplicationReview({ open, onClose, job }: Props) {
             <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50' }}>
               <Stack direction="row" spacing={2} alignItems="center" sx={{ mb: 3 }}>
                 <Avatar
-                  sx={{ width: 64, height: 64 }}
-                  src="https://via.placeholder.com/64"
-                />
+                  sx={{
+                    width: 64,
+                    height: 64,
+                    bgcolor: 'primary.light',
+                    fontSize: '1.5rem',
+                  }}
+                >
+                  {contactInfo.name.split(' ').map(n => n[0]).join('')}
+                </Avatar>
                 <Box>
                   <Typography variant="h6">{contactInfo.name}</Typography>
                   <Typography variant="body2" color="text.secondary">
@@ -125,9 +199,31 @@ function ApplicationReview({ open, onClose, job }: Props) {
       case 1:
         return (
           <Stack spacing={3}>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              Cover Letter
-            </Typography>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                Cover Letter
+              </Typography>
+              <Button
+                startIcon={<AutoFixHighIcon />}
+                variant="outlined"
+                size="small"
+                sx={{
+                  borderRadius: 2,
+                  color: 'primary.light',
+                  borderColor: 'primary.light',
+                  '&:hover': {
+                    borderColor: 'primary.light',
+                    backgroundColor: alpha('#057642', 0.04),
+                  },
+                }}
+              >
+                Rewrite
+              </Button>
+            </Stack>
             <Paper
               elevation={0}
               sx={{
@@ -162,9 +258,31 @@ function ApplicationReview({ open, onClose, job }: Props) {
       case 2:
         return (
           <Stack spacing={3}>
-            <Typography variant="h6" sx={{ fontWeight: 600 }}>
-              Resume
-            </Typography>
+            <Stack
+              direction="row"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Typography variant="h6" sx={{ fontWeight: 600 }}>
+                Resume
+              </Typography>
+              <Button
+                startIcon={<AutoFixHighIcon />}
+                variant="outlined"
+                size="small"
+                sx={{
+                  borderRadius: 2,
+                  color: 'primary.light',
+                  borderColor: 'primary.light',
+                  '&:hover': {
+                    borderColor: 'primary.light',
+                    backgroundColor: alpha('#057642', 0.04),
+                  },
+                }}
+              >
+                Rewrite
+              </Button>
+            </Stack>
             <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                 <Typography variant="subtitle1" color="primary">
@@ -207,6 +325,42 @@ function ApplicationReview({ open, onClose, job }: Props) {
                 />
               </Paper>
             ))}
+          </Stack>
+        );
+      case 4:
+        return (
+          <Stack spacing={4} alignItems="center" sx={{ py: 8 }}>
+            <CelebrationIcon
+              sx={{
+                fontSize: 64,
+                color: 'primary.light',
+                animation: 'bounce 1s infinite',
+              }}
+            />
+            <Stack spacing={2} alignItems="center" textAlign="center">
+              <Typography variant="h4" sx={{ fontWeight: 600 }}>
+                Great job!
+              </Typography>
+              <Typography variant="h6" color="text.secondary" sx={{ maxWidth: 480 }}>
+                Your application has been submitted to {job.jobPostingData.companyName}
+              </Typography>
+              <Typography color="text.secondary" sx={{ maxWidth: 480 }}>
+                The AI agent will keep track of this application and notify you of any updates.
+              </Typography>
+            </Stack>
+            <Button
+              variant="contained"
+              onClick={onClose}
+              sx={{
+                mt: 4,
+                bgcolor: '#057642',
+                '&:hover': {
+                  bgcolor: '#046236',
+                },
+              }}
+            >
+              Done
+            </Button>
           </Stack>
         );
       default:
@@ -252,7 +406,7 @@ function ApplicationReview({ open, onClose, job }: Props) {
             }}
           />
           <Stack direction="row" spacing={2} justifyContent="center">
-            {['Contact Info', 'Cover Letter', 'Resume', 'Questions'].map((label, index) => (
+            {['Contact Info', 'Cover Letter', 'Resume', 'Questions', 'Success'].map((label, index) => (
               <Box
                 key={label}
                 sx={{
@@ -270,39 +424,59 @@ function ApplicationReview({ open, onClose, job }: Props) {
         </Stack>
       </DialogTitle>
 
-      <DialogContent sx={{ p: 3 }}>
+      <DialogContent sx={{ p: 3, position: 'relative' }}>
         {renderStepContent(activeStep)}
 
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
-          <Button
-            onClick={handleBack}
-            disabled={activeStep === 0}
-            sx={{ visibility: activeStep === 0 ? 'hidden' : 'visible' }}
-          >
-            Back
-          </Button>
-          {activeStep === totalSteps - 1 ? (
+        {activeStep < 4 && (
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 4 }}>
             <Button
-              variant="contained"
-              onClick={handleSubmit}
-              sx={{
-                bgcolor: '#057642',
-                '&:hover': {
-                  bgcolor: '#046236',
-                },
-              }}
+              onClick={handleBack}
+              disabled={activeStep === 0 || isSubmitting}
+              sx={{ visibility: activeStep === 0 ? 'hidden' : 'visible' }}
             >
-              Submit application
+              Back
             </Button>
-          ) : (
-            <Button
-              variant="contained"
-              onClick={handleNext}
-            >
-              Next
-            </Button>
-          )}
-        </Box>
+            {activeStep === totalSteps - 2 ? (
+              <Button
+                variant="contained"
+                onClick={handleSubmit}
+                disabled={isSubmitting}
+                sx={{
+                  bgcolor: '#057642',
+                  '&:hover': {
+                    bgcolor: '#046236',
+                  },
+                }}
+              >
+                {isSubmitting ? 'Submitting...' : 'Submit application'}
+              </Button>
+            ) : (
+              <Button
+                variant="contained"
+                onClick={handleNext}
+                disabled={isSubmitting}
+              >
+                Next
+              </Button>
+            )}
+          </Box>
+        )}
+
+        <ReactCanvasConfetti
+          onInit={(instance) => {
+            confettiRef.current = instance;
+          }}
+          style={{
+            position: 'fixed',
+            pointerEvents: 'none',
+            width: '100vw',
+            height: '100vh',
+            top: 0,
+            left: 0,
+            zIndex: 1500,
+            opacity: 1
+          }}
+        />
       </DialogContent>
     </Dialog>
   );
