@@ -86,27 +86,27 @@ const getMatchColor = (matchLevel: string) => {
 const historyData = [
   {
     id: 1,
-    title: "Senior Frontend Engineer",
-    company: "Microsoft",
+    title: "Trust and Safety Eng Manager",
+    company: "Twitter/X",
     date: "2024-03-15",
-    status: "Interview Scheduled",
+    status: "Viewed",
     statusType: "interview",
   },
   {
     id: 2,
-    title: "Full Stack Developer",
-    company: "Amazon",
+    title: "Content Moderation, Engineering Manager",
+    company: "Meta",
     date: "2024-03-14",
-    status: "Applied",
-    statusType: "applied",
+    status: "Rejected",
+    statusType: "rejected",
   },
   {
     id: 3,
-    title: "React Developer",
-    company: "Meta",
+    title: "US Engineering Manager",
+    company: "Tiktok",
     date: "2024-03-12",
-    status: "Application Viewed",
-    statusType: "viewed",
+    status: "Pending Decision",
+    statusType: "pending",
   },
 ];
 
@@ -118,10 +118,22 @@ const getStatusChipProps = (statusType: string) => {
         color: 'success' as const,
         variant: 'filled' as const,
       };
+   case 'rejected':
+        return {
+          icon: <EventIcon />,
+          color: 'error' as const,
+          variant: 'filled' as const,
+        };
     case 'applied':
       return {
         icon: <SendIcon />,
         color: 'primary' as const,
+        variant: 'outlined' as const,
+      };
+   case 'pending':
+      return {
+        icon: <SendIcon />,
+        color: 'warning' as const,
         variant: 'outlined' as const,
       };
     default:

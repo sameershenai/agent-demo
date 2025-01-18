@@ -100,8 +100,8 @@ function App() {
         "jobs": [
           {
             "jobId": "4128046946",
-            "resumeData": "Mock resume data for job 4128046946, title:Frontend Engineer, UI Components and Patterns",
-            "coverLetterData": "Mock cover letter data for job 4128046946, title: Frontend Engineer, UI Components and Patterns",
+            "resumeData": "Mock resume data for job 4128046946, title:Engineering Manager, UI Components and Patterns",
+            "coverLetterData": "Mock cover letter data for job 4128046946, title: FEngineering Manager, UI Components and Patterns",
             "feedback": {
               "matchLevel": "high",
               "additionalComment": "Great match for your skills",

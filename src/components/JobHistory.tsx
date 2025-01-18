@@ -22,7 +22,7 @@ const StatusChip = styled(Chip)(({ theme }) => ({
 const historyData = [
   {
     id: 1,
-    title: "Senior Frontend Engineer",
+    title: "Senior Engineering Manager",
     company: "Microsoft",
     date: "2024-03-15",
     status: "Interview Scheduled",
@@ -30,7 +30,7 @@ const historyData = [
   },
   {
     id: 2,
-    title: "Full Stack Developer",
+    title: "Director of Engineering",
     company: "Amazon",
     date: "2024-03-14",
     status: "Applied",
@@ -38,7 +38,7 @@ const historyData = [
   },
   {
     id: 3,
-    title: "React Developer",
+    title: "Eng Manager, Trust and Safety",
     company: "Meta",
     date: "2024-03-12",
     status: "Application Viewed",

@@ -168,7 +168,7 @@ function ApplicationReview({ open, onClose, job }: Props) {
             <Paper elevation={0} sx={{ p: 3, bgcolor: 'grey.50' }}>
               <Stack direction="row" justifyContent="space-between" alignItems="center" sx={{ mb: 2 }}>
                 <Typography variant="subtitle1" color="primary">
-                  john-doe-resume.pdf
+                  justin-lai-resume.pdf
                 </Typography>
                 <CheckCircleIcon color="success" />
               </Stack>
